@@ -1,0 +1,23 @@
+// Disable annoying warnings - set to true for debugging
+$output-bourbon-deprecation-warnings: false;
+
+// Third-party dependencies
+@import 'vendor/normalize';
+@import 'vendor/font-awesome/font-awesome';
+@import '~bourbon/bourbon';
+@import '~breakpoint/breakpoint';
+
+// Global vars
+@import 'common/vars';
+
+// Common styles
+@import 'common/mixins';
+@import 'common/placeholders';
+@import 'common/layout';
+
+// Components
+@import 'components/modal';
+
+// Modules
+@import 'modules/form';
+@import 'modules/footer';

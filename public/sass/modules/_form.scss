@@ -1,0 +1,24 @@
+.form {
+  @extend %base-text;
+
+  width: 80%;
+  text-align: center;
+
+  @include breakpoint($bp-medium-landscape) {
+    width: 60%;
+  }
+
+  &__title {
+    @extend %heading;
+
+    font-family: $heading-font-stack;
+  }
+
+  &__field {
+    width: 90%;
+  }
+
+  &__button {
+    @extend %button;
+  }
+}
