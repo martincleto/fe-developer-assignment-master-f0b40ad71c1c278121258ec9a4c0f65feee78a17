@@ -12,6 +12,7 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack -p --progress --colors",
     "clean": "rm -rf build/",
+    "data-server": "node ./scripts/dyson.js",
     "lint:js": "eslint --cache -c config/.eslintrc.json --cache-location cache/.eslintcache src/js/**/*.js test/js/**/*.js; exit 0",
     "lint:sass": "sass-lint -c config/.sass-lint.yml -v -q",
     "lint": "npm run lint:sass && npm run lint:js",
@@ -47,6 +48,7 @@
     "karma-babel-preprocessor": "^6.0.1",
     "karma-chrome-launcher": "^2.0.0",
     "karma-coverage": "^1.1.1",
+    "karma-es6-shim": "^1.0.0",
     "karma-jasmine": "^1.1.0",
     "karma-phantomjs-launcher": "^1.0.2",
     "karma-webpack": "^2.0.1",

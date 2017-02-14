@@ -17,9 +17,10 @@ const env = process.env.NODE_ENV || 'development';
 
 let baseConfig = {
     entry: {
-      main: path.join(dirJS, 'main.js'),
+      main: path.join(dirJS, 'app.js'),
       vendor: [
-        'babel-polyfill'
+        'babel-polyfill',
+        path.join(dirJS, 'vendor/fetch-polyfill.js')
       ]
     },
     output: {
