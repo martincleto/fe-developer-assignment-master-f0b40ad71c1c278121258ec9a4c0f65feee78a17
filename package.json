@@ -19,7 +19,7 @@
     "prebuild": "npm run clean",
     "pretest": "npm run clean & npm run lint",
     "start": "concurrently \"node ./scripts/dyson.js\" \"webpack-dev-server\"",
-    "test": "concurrently \"node ./scripts/dyson.js\" \"karma start config/karma.conf.js\""
+    "test": "concurrently -k \"node ./scripts/dyson.js\" \"karma start config/karma.conf.js\"; exit 0"
   },
   "engines": {
     "node": ">=6",
