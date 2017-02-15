@@ -1,13 +1,24 @@
-
-import {api} from './services/api'
+// @TODO Find a way to import dinamically the component Classes 
+import UIMenu from './components/UIMenu'
 
 import '../sass/main.scss'
 
-document.addEventListener('DOMContentLoaded', function() {
+window.UIMenu = UIMenu
 
-  let hotels = api.get('hotels')
+document.addEventListener('DOMContentLoaded', () => {
+  let directives = document.querySelectorAll('[data-ui-widget]')
+  let i = 0
+  let l = directives.length
 
-  hotels.then(data => {
-    console.log('hotels', data)
-  })
+  if (l) {
+    for (; i<l; i++) {
+      let domNode = directives[i]
+      let widgetName = domNode.getAttribute('data-ui-widget')
+      let WidgetConstructor = 'UI' + widgetName.charAt(0).toUpperCase() + widgetName.slice(1)
+
+      console.log(window[WidgetConstructor])
+
+      new window[WidgetConstructor](domNode)
+    }
+  }
 });
