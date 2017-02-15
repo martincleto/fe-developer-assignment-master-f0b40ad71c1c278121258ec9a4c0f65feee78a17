@@ -1,9 +1,9 @@
 /**
  * Abstract class UIComponent
- * @property {string} uuid
  * @property {object} domNode
+ * @property {string} uuid
  * @property {string} template
- * @static {function} generateId
+ * @public {function} generateId
  * @public {function} render
  */
 
