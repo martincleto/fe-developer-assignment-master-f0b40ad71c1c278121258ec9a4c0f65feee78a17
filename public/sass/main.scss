@@ -9,14 +9,13 @@ $output-bourbon-deprecation-warnings: false;
 // Global vars
 @import 'common/vars';
 
+// Theme (overrides global vars)
+@import 'theme/lmn/lmn';
+
 // Common styles
 @import 'common/mixins';
 @import 'common/placeholders';
 @import 'common/layout';
 
 // Components
-@import 'components/modal';
-
-// Modules
-@import 'modules/form';
-@import 'modules/footer';
+@import 'components/menu';

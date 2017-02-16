@@ -35,13 +35,34 @@ class UIMenu extends UIComponent {
 
     this.domNode.id = `uuid-${this.uuid}`
     this.domNode.classList.add('menu')
-    this.domNode.insertAdjacentHTML('beforeend', `<ul>${output}</ul>`)
+    this.domNode.insertAdjacentHTML('beforeend', `<ul class="menu__list">${output}</ul>`)
   }
 
-  hide() {
-    this.forEach(item => {
+  buildItemDetail(data, context) {
+    context.insertAdjacentHTML(
+      'beforeend',
+      `<article itemscope itemtype="http://schema.org/Hotel" class="menu__detail" aria-hidden="true">
+        <img src="${data.imgUrl}" alt="Picture of ${data.name}" itemprop="photo" class="detail__image">
+        <header>
+          <h2 itemprop="name" class="detail__title">${data.name}</h2>
+          <p itemprop="review" class="detail__rating detail__rating--${data.rating}"><span>${data.rating} out of 5</span></p>
+        </header>
+        <footer>
+          <strong class="detail__price">&pound; ${data.price}</strong>
+          <span class="detail__price-info">Total hotel stay</span>
+        </footer>
+      </article>`)
+  }
+
+  hide(items) {
+    items.forEach(item => {
       item.classList.remove('menu__item--active')
+      item.children[1].setAttribute('aria-hidden', 'true')
     })
+  }
+
+  store(key, data) {
+    sessionStorage.setItem(key, data)
   }
 
   setBehaviour() {
@@ -51,60 +72,66 @@ class UIMenu extends UIComponent {
     let activeMenuItems
     let activeMenuItemsSel
     let button
+    let dataSource
+    let parentNode
 
     for (; i<l; i++) {
-      button = buttons[i]
-
-      button.addEventListener('click', evt => {
+      buttons[i].addEventListener('click', evt => {
         evt.preventDefault()
 
-        activeMenuItemsSel = `#${this.domNode.id} .menu__item--active:not(#${button.parentNode.id})`
+        button = evt.target
+        dataSource = button.getAttribute('data-source')
+        parentNode = button.parentNode
+
+        activeMenuItemsSel = `#${this.domNode.id} .menu__item--active:not(#${parentNode.id})`
         activeMenuItems = document.querySelectorAll(activeMenuItemsSel)
 
         if (activeMenuItems.length) {
-          this.hide.apply(activeMenuItems)
+          this.hide(activeMenuItems)
         }
 
-        this.show.apply(button)
+        this.show(parentNode, dataSource)
       })
     }
   }
 
-  show() {
-    let toggle = this.parentNode.classList.contains('menu__item--active')? 'remove' : 'add'
+  show(item, dataSource) {
+    let visible = item.classList.contains('menu__item--active')
+    let toggle = visible ?  'remove' : 'add'
+    let detail = item.children[0].nextSibling
 
-    //this.parentNode.classList.toggle('menu__item--active') seems not to be working nice in browsers
-    this.parentNode.classList[toggle]('menu__item--active')
+    if (!visible) {
+      let cachedItem = sessionStorage.getItem(dataSource)
+      let itemIndex = Array.from(item.parentNode.children).indexOf(item)
+      let title = `${document.title} - `
 
-    let resourcePath = this.getAttribute('data-source')
-    let cachedItem = sessionStorage.getItem(resourcePath)
-    let parentNode = this.parentNode
-    let itemIndex = Array.from(parentNode.parentNode.children).indexOf(parentNode)
-    let title = `${document.title} - `
+      if (!cachedItem) {
+        api.get(dataSource).then(data => {
+          this.buildItemDetail(data, item)
+          this.store(dataSource, JSON.stringify(data))
+          item.children[1].setAttribute('aria-hidden', visible)
+          title += data.name
+        })
+      } else {
+        let cachedData = JSON.parse(cachedItem)
 
-    if (!cachedItem) {
-      api.get(resourcePath).then(data => {
-        parentNode.insertAdjacentHTML(
-          'beforeend',
-          `<article itemscope itemtype="http://schema.org/Hotel" class="detail" aria-hidden="false">
-            <img src="${data.imgSrc}" alt="Picture of ${data.name}" itemprop="photo" class="detail__image">
-              <header>
-                <h2 itemprop="name" class="detail__title">${data.name}</h2>
-                <p itemprop="review" class="detail__rating"><span>${data.rating} out of 5</span></p>
-              </header>
-              <footer>
-                <strong class="detail__price">&pound; ${data.price}</strong>
-                <span class="detail__price-info">Total hotel stay</span>
-              </footer>
-          </article>`)
-        sessionStorage.setItem(resourcePath, JSON.stringify(data))
-        title += data.name
-      })
-    } else {
-      let cachedData = JSON.parse(cachedItem)
-      title += cachedData.name
+        if (!detail) {
+          this.buildItemDetail(cachedData, item)
+        }
+
+        item.children[1].setAttribute('aria-hidden', visible)
+        title += cachedData.name
+      }
     }
 
+    if (detail) {
+      item.children[1].setAttribute('aria-hidden', visible) // @TODO don't DRY
+    }
+
+    //this.parentNode.classList.toggle('menu__item--active') seems not to be working nice in browsers
+    item.classList[toggle]('menu__item--active')
+
+    // @TODO manage widget state based on History API
     //history.pushState({activeItemIndex: itemIndex }, title, this.href)
   }
 

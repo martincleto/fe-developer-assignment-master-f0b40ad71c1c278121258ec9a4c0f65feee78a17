@@ -1,0 +1,26 @@
+
+.menu {
+  &__list {
+    list-style: none;
+    padding: 0;
+  }
+
+  &__item {
+    a {
+      @extend %button;
+
+      display: block;
+    }
+  }
+
+  &__detail {
+    transition: opacity max-height 1s ease-out;
+    opacity: 0;
+    max-height: 0;
+
+    &[aria-hidden="false"] {
+      opacity: 1;
+      max-height: 100%;
+    }
+  }
+}

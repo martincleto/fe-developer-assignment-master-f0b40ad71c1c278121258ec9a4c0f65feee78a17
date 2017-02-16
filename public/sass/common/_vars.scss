@@ -11,7 +11,7 @@ $modular-scale-base: 1rem;
 
 // ================== Breakpoints ==================  //
 
-$bp-medium-portrait: 37.5em; // 600px
+$bp-medium-portrait: 40em; // 640px
 $bp-medium-landscape: 62.5em; // 1000px
 $bp-large: 90em; // 1440px // 90em
 
@@ -49,6 +49,9 @@ $primary-color: #373737;
 $secondary-color: #DCD0D0;
 $tertiary-color: lighten($primary-color, 74%);
 $accent-color: #C0B283;
+
+$lightest-color: #fff;
+$darkest-color: #333;
 
 // ================= Other default =================  //
 

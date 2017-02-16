@@ -2,6 +2,7 @@
 html {
   box-sizing: border-box;
   font-size: $base-default-font-size;
+  background-color: $lightest-color;
 
   @include breakpoint($bp-medium-landscape) {
     font-size: $base-medium-font-size;
@@ -15,12 +16,15 @@ html {
 }
 
 body {
-  color: $primary-color;
-  background-color: $tertiary-color;
+  color: $darkest-color;
 }
 
 a {
   @extend %link;
+}
+
+[aria-hidden="true"] {
+  display: none;
 }
 
 p {
@@ -28,19 +32,5 @@ p {
 }
 
 .container {
-  @include flex-center;
-
-  flex-direction: column;
   max-width: $layout-max-width;
-  height: 100vh;
-}
-
-#{$all-text-inputs} {
-  @extend %field;
-}
-
-#{$all-text-inputs-active},
-#{$all-text-inputs-hover},
-#{$all-text-inputs-hover} {
-  border-color: $accent-color;
 }

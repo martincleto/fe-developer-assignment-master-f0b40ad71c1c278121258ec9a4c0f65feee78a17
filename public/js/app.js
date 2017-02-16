@@ -1,4 +1,4 @@
-// @TODO Find a way to import dinamically the component Classes 
+// @TODO Find a way to import dinamically the component Classes
 import UIMenu from './components/UIMenu'
 
 import '../sass/main.scss'
@@ -16,9 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
       let widgetName = domNode.getAttribute('data-ui-widget')
       let WidgetConstructor = 'UI' + widgetName.charAt(0).toUpperCase() + widgetName.slice(1)
 
-      console.log(window[WidgetConstructor])
-
       new window[WidgetConstructor](domNode)
+
+      console.log('window.UIMenu called')
     }
   }
 });
