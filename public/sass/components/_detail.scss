@@ -1,0 +1,24 @@
+.detail {
+  padding: 1rem;
+  overflow: hidden;
+
+  &[aria-hidden="true"] {
+    max-height: 0;
+    opacity: 0;
+    transition-duration: .3s;
+    transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  }
+
+  &[aria-hidden="false"] {
+    max-height: 1000px;
+    opacity: 1;
+    transition-duration: .3s;
+    transition-timing-function: ease-in;
+  }
+
+  &__image {
+    max-width: 30%;
+    height: auto;
+    float: left;
+  }
+}

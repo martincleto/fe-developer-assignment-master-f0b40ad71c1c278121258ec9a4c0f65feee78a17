@@ -1,12 +1,8 @@
 
 html {
   box-sizing: border-box;
-  font-size: $base-default-font-size;
   background-color: $lightest-color;
-
-  @include breakpoint($bp-medium-landscape) {
-    font-size: $base-medium-font-size;
-  }
+  font-size: 62.5%;
 }
 
 *,
@@ -16,21 +12,28 @@ html {
 }
 
 body {
+  font-size: $base-default-font-size;
   color: $darkest-color;
+  background-color: $lightest-color;
 }
 
 a {
   @extend %link;
 }
 
-[aria-hidden="true"] {
-  display: none;
-}
-
 p {
   margin-top: 0;
 }
 
+h1 {
+  @extend %heading;
+}
+
+[aria-hidden="true"] {
+  display: none;
+}
+
 .container {
   max-width: $layout-max-width;
+  padding: 0 .5rem;
 }

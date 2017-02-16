@@ -41,7 +41,7 @@ class UIMenu extends UIComponent {
   buildItemDetail(data, context) {
     context.insertAdjacentHTML(
       'beforeend',
-      `<article itemscope itemtype="http://schema.org/Hotel" class="menu__detail" aria-hidden="true">
+      `<article itemscope itemtype="http://schema.org/Hotel" class="detail" aria-hidden="true">
         <img src="${data.imgUrl}" alt="Picture of ${data.name}" itemprop="photo" class="detail__image">
         <header>
           <h2 itemprop="name" class="detail__title">${data.name}</h2>
