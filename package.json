@@ -18,6 +18,7 @@
     "lint": "npm run lint:sass && npm run lint:js",
     "prebuild": "npm run clean",
     "pretest": "npm run clean & npm run lint",
+    "serve": "concurrently \"node ./scripts/dyson.js\" \"npm run build && node scripts/server.js\"",
     "start": "concurrently \"node ./scripts/dyson.js\" \"webpack-dev-server\"",
     "test": "concurrently -k \"node ./scripts/dyson.js\" \"karma start config/karma.conf.js\"; exit 0"
   },
