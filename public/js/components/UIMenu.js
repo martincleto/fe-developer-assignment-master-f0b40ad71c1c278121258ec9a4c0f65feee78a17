@@ -42,15 +42,19 @@ class UIMenu extends UIComponent {
     context.insertAdjacentHTML(
       'beforeend',
       `<article itemscope itemtype="http://schema.org/Hotel" class="detail" aria-hidden="true">
-        <img src="${data.imgUrl}" alt="Picture of ${data.name}" itemprop="photo" class="detail__image">
-        <header>
-          <h2 itemprop="name" class="detail__title">${data.name}</h2>
-          <p itemprop="review" class="detail__rating detail__rating--${data.rating}"><span>${data.rating} out of 5</span></p>
-        </header>
-        <footer>
-          <strong class="detail__price">&pound; ${data.price}</strong>
-          <span class="detail__price-info">Total hotel stay</span>
-        </footer>
+        <div class="detail__inner-wrapper">
+          <div class="detail__image">
+            <img src="${data.imgUrl}" alt="Picture of ${data.name}" itemprop="photo">
+          </div>
+          <header>
+            <h2 itemprop="name" class="detail__title">${data.name}</h2>
+            <p itemprop="review" class="detail__rating detail__rating--${data.rating}"><span>${data.rating} out of 5</span></p>
+          </header>
+          <footer class="detail__footer">
+            <strong class="detail__price">&pound; ${data.price}.00</strong>
+            <span class="detail__price-info">Total hotel stay</span>
+          </footer>
+        </div>
       </article>`)
   }
 

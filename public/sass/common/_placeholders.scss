@@ -5,8 +5,29 @@
   line-height: $default-line-height;
 }
 
+%full-width {
+  @include breakpoint($bp-medium-portrait) {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+  }
+}
+
+%heading {
+  color: $lightest-color;
+  background-color: $accent-color;
+  font-family: $heading-font-stack;
+  font-size: $xl-font-size;
+  text-align: center;
+  line-height: $default-line-height;
+  padding: 1rem 1.5rem;
+  border-bottom: solid 1px darken($accent-color, 15%);
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 %button {
-  background-color: $tertiary-color;
+  @include background(linear-gradient($lightest-color, $secondary-color));
+
   color: $darkest-color;
   font-size: $large-font-size;
   font-family: $base-font-stack;
@@ -25,25 +46,12 @@
   }
 }
 
-%heading {
-  color: $lightest-color;
-  background-color: $accent-color;
-  font-family: $heading-font-stack;
-  font-size: $xl-font-size;
-  line-height: $default-line-height;
-  padding: 1.15rem 1.5rem;
-  border-top: solid 3px darken($accent-color, 15%);
-  margin: 0 -.5rem;
-}
-
-%link {
-  color: $accent-color;
-  outline: none;
-  transition: color .5s ease-out;
-
-  &:active,
-  &:hover,s
-  &:focus {
-    color: darken($accent-color, 40%);
-  }
+%visually-hidden {
+  position: absolute !important;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding:0 !important;
+  border:0 !important;
+  height: 1px !important;
+  width: 1px !important;
+  overflow: hidden;
 }

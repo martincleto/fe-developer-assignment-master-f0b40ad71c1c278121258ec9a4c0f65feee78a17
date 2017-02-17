@@ -17,23 +17,21 @@ body {
   background-color: $lightest-color;
 }
 
-a {
-  @extend %link;
-}
-
 p {
   margin-top: 0;
 }
 
 h1 {
+  @extend %full-width;
   @extend %heading;
 }
 
 [aria-hidden="true"] {
-  display: none;
+  //display: none;
 }
 
 .container {
   max-width: $layout-max-width;
-  padding: 0 .5rem;
+  min-width: 32rem;
+  margin: 0 auto;
 }

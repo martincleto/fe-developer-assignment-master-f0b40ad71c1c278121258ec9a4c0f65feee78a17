@@ -20,10 +20,10 @@ $heading-font-stack: $georgia;
 // base-* sizes should be used only to be set into rules applied to 'html' element
 $base-default-font-size: 14px;
 // global sizes related to base font size
-$small-font-size: .9rem;
+$small-font-size: 1.2rem;
 $medium-font-size: 1.4rem;
 $large-font-size: 1.8rem;
-$xl-font-size: 2.8rem;
+$xl-font-size: 2.4rem;
 
 $default-line-height: 100%;
 $line-height-medium: 150%;
@@ -43,7 +43,7 @@ $zindex-reset: -1;
 $primary-color: #373737;
 $secondary-color: #DCD0D0;
 $tertiary-color: lighten($primary-color, 74%);
-$accent-color: #C0B283;
+$accent-color: #DA4A8F;
 
 $lightest-color: #fff;
 $darkest-color: #000;
