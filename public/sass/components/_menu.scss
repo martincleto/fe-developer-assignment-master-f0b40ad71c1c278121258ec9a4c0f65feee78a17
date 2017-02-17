@@ -1,0 +1,38 @@
+// component vars
+$menu-padding: 3.2rem;
+$menu-border-color-1: lighten($primary-color, 55%);
+$menu-border-color-2: lighten($primary-color, 65%);
+
+// component rules
+.menu {
+  @include breakpoint($bp-medium-portrait) {
+    position: relative;
+    padding: $menu-padding;
+  }
+
+  &__list {
+    @include breakpoint($bp-medium-portrait) {
+      max-width: 35%;
+      border: 1px solid $menu-border-color-2;
+    }
+
+    background-color: $tertiary-color;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__item {
+    @include breakpoint($bp-medium-portrait) {
+      border-bottom: 0;
+    }
+    border-top: solid 1px $menu-border-color-1;
+    border-bottom: solid 1px $menu-border-color-2;
+
+    a {
+      @extend %button;
+
+      display: block;
+    }
+  }
+}

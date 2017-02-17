@@ -5,73 +5,53 @@
   line-height: $default-line-height;
 }
 
-%button {
+%full-width {
+  @include breakpoint($bp-medium-portrait) {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+  }
+}
+
+%heading {
+  color: $lightest-color;
   background-color: $accent-color;
-  color: $tertiary-color;
+  font-family: $heading-font-stack;
+  font-size: $xl-font-size;
+  text-align: center;
+  line-height: $default-line-height;
+  padding: 1rem 1.5rem;
+  border-bottom: solid 1px darken($accent-color, 15%);
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+%button {
+  @include background(linear-gradient($lightest-color, $secondary-color));
+
+  color: $darkest-color;
+  font-size: $large-font-size;
   font-family: $base-font-stack;
-  text-shadow: 1px 1px 0 darken($accent-color, 15%);
+  text-decoration: none;
+  //text-shadow: 1px 1px 0 darken($accent-color, 15%);
   line-height: $large-line-height;
-  padding: 0 1.6rem;
-  border-radius: $default-border-radius;
-  border: 0;
+  padding: .6rem 1rem;
   outline: none;
-  cursor: pointer;
   opacity: 1;
   transition: all .3s ease-in;
 
   &:active,
   &:hover,
   &:focus {
-    background-color: darken($accent-color, 14%);
-  }
-
-  &[disabled] {
-    opacity: .6;
-    cursor: not-allowed;
+    //background-color: darken($accent-color, 14%);
   }
 }
 
-%button-icon {
-  background-color: transparent;
-  padding: 0;
-  margin: 0;
-  border: 0;
-  box-shadow: none;
-}
-
-%field {
-  width: 100%;
-  font-family: $base-font-stack;
-  line-height: $large-line-height;
-  text-align: left;
-  padding: 0 .5rem;
-  border-radius: $default-border-radius;
-  border: solid 1px $secondary-color;
-  outline: none;
-  margin: 0 0 2rem;
-
-  &::placeholder {
-    color: $secondary-color;
-  }
-}
-
-%heading {
-  color: $primary-color;
-  font-family: $heading-font-stack;
-  font-size: $large-font-size;
-  line-height: $default-line-height;
-  text-align: center;
-  margin-top: 0;
-}
-
-%link {
-  color: $accent-color;
-  outline: none;
-  transition: color .5s ease-out;
-
-  &:active,
-  &:hover,s
-  &:focus {
-    color: darken($accent-color, 40%);
-  }
+%visually-hidden {
+  position: absolute !important;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding:0 !important;
+  border:0 !important;
+  height: 1px !important;
+  width: 1px !important;
+  overflow: hidden;
 }

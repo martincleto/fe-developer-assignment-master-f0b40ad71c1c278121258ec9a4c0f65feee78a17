@@ -1,11 +1,8 @@
 
 html {
   box-sizing: border-box;
-  font-size: $base-default-font-size;
-
-  @include breakpoint($bp-medium-landscape) {
-    font-size: $base-medium-font-size;
-  }
+  background-color: $lightest-color;
+  font-size: 62.5%;
 }
 
 *,
@@ -15,32 +12,26 @@ html {
 }
 
 body {
-  color: $primary-color;
-  background-color: $tertiary-color;
-}
-
-a {
-  @extend %link;
+  font-size: $base-default-font-size;
+  color: $darkest-color;
+  background-color: $lightest-color;
 }
 
 p {
   margin-top: 0;
 }
 
+h1 {
+  @extend %full-width;
+  @extend %heading;
+}
+
+[aria-hidden="true"] {
+  //display: none;
+}
+
 .container {
-  @include flex-center;
-
-  flex-direction: column;
   max-width: $layout-max-width;
-  height: 100vh;
-}
-
-#{$all-text-inputs} {
-  @extend %field;
-}
-
-#{$all-text-inputs-active},
-#{$all-text-inputs-hover},
-#{$all-text-inputs-hover} {
-  border-color: $accent-color;
+  min-width: 32rem;
+  margin: 0 auto;
 }

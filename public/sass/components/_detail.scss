@@ -1,0 +1,105 @@
+$detail-border-color: lighten($primary-color, 55%);
+
+.detail {
+  @include breakpoint($bp-medium-portrait) {
+    position: absolute;
+    top: $menu-padding;
+    right: $menu-padding;
+    width: 58%;
+  }
+
+  overflow: hidden;
+
+  &[aria-hidden="true"] {
+    @include breakpoint($bp-medium-portrait) {
+      max-height: none;
+    }
+
+    max-height: 0;
+    opacity: 0;
+    transition-duration: .3s;
+    transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  }
+
+  &[aria-hidden="false"] {
+    max-height: 1000px;
+    opacity: 1;
+    transition-duration: .3s;
+    transition-timing-function: ease-in;
+  }
+
+  &__inner-wrapper {
+    @include breakpoint($bp-medium-portrait) {
+      background-color: $tertiary-color;
+      min-height: 19.6rem;
+      padding: 3.5rem;
+      border-top: 0;
+      border-bottom: solid 1px $detail-border-color;
+    }
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    padding: 1rem;
+    border-top: solid 1px $detail-border-color;
+    overflow: hidden;
+  }
+
+  &__image {
+    position: relative;
+    width: 30%;
+    height: 12.5rem;
+    margin-right: 1rem;
+    overflow: hidden;
+
+    img {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      height: 100%;
+      width: auto;
+      transform: translate(-50%,-50%);
+    }
+  }
+
+  &__title {
+    font-size: $large-font-size;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  &__rating {
+    height: 1.9rem;
+    background: url('/images/ratings.png') 0 0 no-repeat;
+    margin: 0;
+    overflow: hidden;
+
+    @for $i from 1 through 5 {
+      &--#{$i} {
+        background-position: 0 $i * -18px
+      }
+    }
+
+    span {
+      @extend %visually-hidden;
+    }
+  }
+
+  &__footer {
+    flex-grow: 1;
+    align-self: flex-end;
+    text-align: right;
+    margin: 0;
+  }
+
+  &__price {
+    display: block;
+    color: $accent-color;
+    font-size: $xl-font-size;
+    font-weight: 700;
+  }
+
+  &__price-info {
+    color: lighten($primary-color, 50%);
+  }
+}

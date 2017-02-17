@@ -9,7 +9,7 @@ const path = require('path');
 
 const basePath = './';
 const dirPublic = path.resolve(__dirname, basePath, 'public');
-const dirAssets = path.resolve(__dirname, dirPublic, 'assets');
+const dirImages = path.resolve(__dirname, dirPublic, 'images');
 const dirHTML = path.resolve(__dirname, dirPublic, 'html');
 const dirJS = path.resolve(__dirname, dirPublic, 'js');
 const dirBuild = path.resolve(basePath, 'build');
@@ -58,35 +58,17 @@ let baseConfig = {
           },
           {
             test: /\.(jpe?g|png|gif|svg)$/,
-            exclude: [
-              path.join(dirPublic, 'assets/fonts')
-            ],
             loader: 'file-loader?name=images/[name].[ext]?[hash]'
-          },
-          {
-            test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-            loader: 'url-loader?limit=10000&name=fonts/[name].[ext]?[hash]',
-            include: [
-              path.join(dirPublic, 'assets/fonts')
-            ],
-          },
-          {
-            test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/,
-            loader: 'file-loader?name=fonts/[name].[ext]?[hash]',
-            include: [
-              path.join(dirPublic, 'assets/fonts')
-            ],
           }
         ]
     },
     plugins: [
         new CopyWebpackPlugin([
           {
-            from: dirAssets,
+            from: dirImages,
+            to: 'images',
             ignore: [
-              '.DS_Store',
-              'fontawesome*',
-              '*.otf'
+              '.DS_Store'
             ]
           }
         ]),
