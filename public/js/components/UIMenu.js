@@ -3,8 +3,13 @@
  * @extends UIComponent
  * @property {string} uuid
  * @property {object} domNode
- * @property {object} domNode
- * @public {function} generateId
+ * @property {object} model
+ * @public {function} build
+ * @public {function} buildItemDetail
+ * @public {function} hide
+ * @public {function} setBehaviour
+ * @public {function} show
+ * @public {function} store
  * @public {function} render
  */
 
