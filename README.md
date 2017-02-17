@@ -4,7 +4,7 @@
 
 ## Requisites
 
-* node.js >=6
+* node.js >= 6
 * npm >= 3
 
 ## Installation
@@ -18,7 +18,7 @@ or alternatively `$ git clone fe-developer-assignment-master-f0b40ad71c1c2781212
 
 * `$ npm start` creates a development build and starts a web server at <http://localhost:8080/>
 * `$ npm run build` generates a production build
-* `$ npm run serve` launch a basic node.js server at <http://localhost:8080/> in order to check the actual build as in production
+* `$ npm run serve` launch a basic node.js server at <http://localhost:3000/> in order to check the actual build as in production
 
 ## Technical Notes
 
