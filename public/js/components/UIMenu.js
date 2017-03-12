@@ -114,6 +114,8 @@ class UIMenu extends UIComponent {
     const active = this.getItemState(item)
     let detail = item.children[1]
 
+    this.setItemState(item)
+
     if (active) {
       this.setDetailVisibility(detail)
     } else {
@@ -125,8 +127,6 @@ class UIMenu extends UIComponent {
         this.setDetailVisibility(detail)
       })
     }
-
-    this.setItemState(item)
   }
 
   setDetailVisibility(detail) {

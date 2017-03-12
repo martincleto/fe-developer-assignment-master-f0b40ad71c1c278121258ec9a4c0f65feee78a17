@@ -3,10 +3,8 @@ import UIMenu from './components/UIMenu'
 
 import '../sass/main.scss'
 
-window.UIMenu = UIMenu
-
 // @TODO This mapping should be ideally provided by a route resolving
-const widgets = {
+window.widgets = {
   menu: UIMenu
 }
 

@@ -10,14 +10,16 @@ for (let prop in mockData) {
 }
 
 const randomIndex = Math.floor(Math.random() * Object.keys(mockData).length)
+
 const mockApiPromiseAll = new Promise(resolve => {
   resolve(mockResponse)
 })
+
 const mockApiPromiseOne = new Promise(resolve => {
   resolve(mockResponse[randomIndex])
 })
 
-let createDirective = () => {
+const createDirective = () => {
   let mockDirective = document.createElement('div')
   mockDirective.setAttribute('data-widget-ui', 'menu')
   mockDirective.setAttribute('data-model', 'hotels')
@@ -25,7 +27,7 @@ let createDirective = () => {
   document.body.appendChild(mockDirective)
 }
 
-let clearSessionStorage = () => {
+const clearSessionStorage = () => {
   Object.keys(sessionStorage)
     .filter(function(key) {
       return /hotels/.test(key)
@@ -37,7 +39,6 @@ let clearSessionStorage = () => {
 
 let button
 let detail
-
 let uiMenuItems
 
 describe('UIComponent.js', () => {
