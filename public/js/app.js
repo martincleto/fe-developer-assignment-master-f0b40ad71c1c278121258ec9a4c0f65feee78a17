@@ -1,23 +1,28 @@
-// @TODO Find a way to import dinamically the component Classes
+
 import UIMenu from './components/UIMenu'
 
 import '../sass/main.scss'
 
 window.UIMenu = UIMenu
 
-document.addEventListener('DOMContentLoaded', () => {
+// @TODO This mapping should be ideally provided by a route resolving
+const widgets = {
+  menu: UIMenu
+}
 
-  let directives = document.querySelectorAll('[data-ui-widget]')
+document.addEventListener('DOMContentLoaded', () => {
+  const directives = document.querySelectorAll('[data-ui-widget]')
+  const l = directives.length
   let i = 0
-  let l = directives.length
 
   if (l) {
     for (; i<l; i++) {
-      let domNode = directives[i]
-      let widgetName = domNode.getAttribute('data-ui-widget')
-      let WidgetConstructor = 'UI' + widgetName.charAt(0).toUpperCase() + widgetName.slice(1)
+      let directiveDomNode = directives[i]
+      let directiveName = directiveDomNode.dataset.uiWidget
 
-      new window[WidgetConstructor](domNode)
+      if (typeof widgets[directiveName] !== 'undefined') {
+        new widgets[directiveName](directiveDomNode)
+      }
     }
   }
 });

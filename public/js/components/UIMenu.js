@@ -4,13 +4,17 @@
  * @property {string} uuid
  * @property {object} domNode
  * @property {object} model
+ * @public {function} render
  * @public {function} build
  * @public {function} buildItemDetail
- * @public {function} hide
  * @public {function} setBehaviour
- * @public {function} show
- * @public {function} store
- * @public {function} render
+ * @public {function} hideItems
+ * @public {function} showItem
+ * @public {function} setDetailVisibility
+ * @public {function} checkItemCache
+ * @public {function} getItemState
+ * @public {function} setItemState
+ * @public {function} storeData
  */
 
 import UIComponent from './UIComponent'
@@ -28,6 +32,11 @@ class UIMenu extends UIComponent {
     })
   }
 
+  render() {
+    this.build()
+    this.setBehaviour()
+  }
+
   build() {
     let data = this.data
     let i = 0
@@ -35,7 +44,7 @@ class UIMenu extends UIComponent {
     let output = ''
 
     for (; i<l; i++) {
-      output += `<li class="menu__item" id="menu-item-${i+1}"><a href="/${this.model}/${data[i].id}" data-source="${this.model}/${data[i].id}" aria-role="button">${data[i].name}</a></li>`
+      output += `<li id="menu-item-${i+1}" data-source="${this.model}/${data[i].id}" class="menu__item" ><a href="/${this.model}/${data[i].id}" aria-role="button">${data[i].name}</a></li>`
     }
 
     this.domNode.id = `uuid-${this.uuid}`
@@ -43,7 +52,7 @@ class UIMenu extends UIComponent {
     this.domNode.insertAdjacentHTML('beforeend', `<ul class="menu__list">${output}</ul>`)
   }
 
-  buildItemDetail(data, context) {
+  buildItemDetail(context, data) {
     context.insertAdjacentHTML(
       'beforeend',
       `<article itemscope itemtype="http://schema.org/Hotel" class="detail" aria-hidden="true">
@@ -61,17 +70,8 @@ class UIMenu extends UIComponent {
           </footer>
         </div>
       </article>`)
-  }
 
-  hide(items) {
-    items.forEach(item => {
-      item.classList.remove('menu__item--active')
-      item.children[1].setAttribute('aria-hidden', 'true')
-    })
-  }
-
-  store(key, data) {
-    sessionStorage.setItem(key, data)
+    return context.lastElementChild
   }
 
   setBehaviour() {
@@ -81,73 +81,108 @@ class UIMenu extends UIComponent {
     let activeMenuItems
     let activeMenuItemsSel
     let button
-    let dataSource
-    let parentNode
+    let item
 
     for (; i<l; i++) {
       buttons[i].addEventListener('click', evt => {
         evt.preventDefault()
 
         button = evt.target
-        dataSource = button.getAttribute('data-source')
-        parentNode = button.parentNode
-
-        activeMenuItemsSel = `#${this.domNode.id} .menu__item--active:not(#${parentNode.id})`
+        item = button.parentNode
+        activeMenuItemsSel = `#${this.domNode.id} .menu__item--active:not(#${item.id})`
         activeMenuItems = document.querySelectorAll(activeMenuItemsSel)
 
         if (activeMenuItems.length) {
-          this.hide(activeMenuItems)
+          this.hideItems(activeMenuItems)
         }
 
-        this.show(parentNode, dataSource)
+        this.showItem(item)
+        // @TODO manage widget state based on History API
+        //this.updateWidgetState(item)
       })
     }
   }
 
-  show(item, dataSource) {
-    let visible = item.classList.contains('menu__item--active')
-    let toggle = visible ?  'remove' : 'add'
-    let detail = item.children[0].nextSibling
+  hideItems(items) {
+    items.forEach(item => {
+      item.classList.remove('menu__item--active')
+      this.setDetailVisibility(item.children[1])
+    })
+  }
 
-    if (!visible) {
-      let cachedItem = sessionStorage.getItem(dataSource)
-      let itemIndex = Array.from(item.parentNode.children).indexOf(item)
-      let title = `${document.title} - `
+  showItem(item) {
+    const active = this.getItemState(item)
+    let detail = item.children[1]
+
+    if (active) {
+      this.setDetailVisibility(detail)
+    } else {
+      this.checkItemCache(item).then(data => {
+        if (!detail) {
+          detail = this.buildItemDetail(item, data)
+        }
+
+        this.setDetailVisibility(detail)
+      })
+    }
+
+    this.setItemState(item)
+  }
+
+  setDetailVisibility(detail) {
+    let isActiveItem = this.getItemState(detail.parentNode)
+
+    detail.setAttribute('aria-hidden', !isActiveItem)
+  }
+
+  checkItemCache(item) {
+    return new Promise((resolve, reject) => {
+      const dataSource = item.dataset.source
+      const cachedItem = sessionStorage.getItem(dataSource)
+      const detail = item.children[1]
 
       if (!cachedItem) {
-        api.get(dataSource).then(data => {
-          this.buildItemDetail(data, item)
-          this.store(dataSource, JSON.stringify(data))
-          item.children[1].setAttribute('aria-hidden', visible)
-          title += data.name
-        })
+        api.get(dataSource)
+          .then(data => {
+            this.storeData(dataSource, JSON.stringify(data))
+            resolve(data)
+          })
+          .catch(error => {
+            reject(err)
+          })
       } else {
         let cachedData = JSON.parse(cachedItem)
 
-        if (!detail) {
-          this.buildItemDetail(cachedData, item)
-        }
-
-        item.children[1].setAttribute('aria-hidden', visible)
-        title += cachedData.name
+        resolve(cachedData)
       }
-    }
+    })
+  }
 
-    if (detail) {
-      item.children[1].setAttribute('aria-hidden', visible) // @TODO don't DRY
-    }
+  storeData(key, data) {
+    sessionStorage.setItem(key, data)
+  }
 
+  getItemState(item) {
+    return item.classList.contains('menu__item--active')
+  }
+
+  setItemState(item) {
+    let active = this.getItemState(item)
+    let toggle = active ?  'remove' : 'add'
     //this.parentNode.classList.toggle('menu__item--active') seems not to be working nice in browsers
     item.classList[toggle]('menu__item--active')
-
-    // @TODO manage widget state based on History API
-    //history.pushState({activeItemIndex: itemIndex }, title, this.href)
   }
 
-  render() {
-    this.build()
-    this.setBehaviour()
+/*
+  updateWidgetState(activeItem) {
+    const activeItemIndex = Array.from(activeItem.parentNode.children).indexOf(activeItem)
+    const path = activeItem.dataset.source
+    const data = sessionStorage.getItem(path)
+    const {name} = JSON.parse(data)
+
+    history.replaceState({activeItemIndex: activeItemIndex }, name, path)
   }
+*/
 }
 
 export default UIMenu
