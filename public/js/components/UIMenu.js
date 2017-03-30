@@ -24,12 +24,18 @@ class UIMenu extends UIComponent {
   constructor(domNode) {
     super(domNode)
 
-    this.model = domNode.getAttribute('data-model')
+    //this.model = domNode.getAttribute('data-model')
+    this.model = domNode.dataset.model
+    this.activeItem = null
 
     api.get(this.model).then(data => {
       this.data = data
       this.render()
     })
+
+    if (history.state && typeof history.state.activeItem !== 'undefined') {
+      this.activeItem = history.state.activeItem
+    }
   }
 
   render() {
@@ -38,13 +44,13 @@ class UIMenu extends UIComponent {
   }
 
   build() {
-    let data = this.data
+    const data = this.data
+    const dataLength = data.length
     let i = 0
-    let l = data.length
     let output = ''
 
-    for (; i<l; i++) {
-      output += `<li id="menu-item-${i+1}" data-source="${this.model}/${data[i].id}" class="menu__item" ><a href="/${this.model}/${data[i].id}" aria-role="button">${data[i].name}</a></li>`
+    for (; i < dataLength; i++) {
+      output += `<li id="menu-item-${i+1}" data-source="${this.model}/${data[i].id}" data-active="false" class="menu__item" ><a href="/${this.model}/${data[i].id}" aria-role="button">${data[i].name}</a></li>`
     }
 
     this.domNode.id = `uuid-${this.uuid}`
@@ -52,13 +58,13 @@ class UIMenu extends UIComponent {
     this.domNode.insertAdjacentHTML('beforeend', `<ul class="menu__list">${output}</ul>`)
   }
 
-  buildItemDetail(context, data) {
-    context.insertAdjacentHTML(
+  buildItemDetail(domContext, data) {
+    domContext.insertAdjacentHTML(
       'beforeend',
       `<article itemscope itemtype="http://schema.org/Hotel" class="detail" aria-hidden="true">
         <div class="detail__inner-wrapper">
           <div class="detail__image">
-            <img src="${data.imgUrl}" alt="Picture of ${data.name}" itemprop="photo">
+            <img src="/${data.imgUrl}" alt="Picture of ${data.name}" itemprop="photo">
           </div>
           <header>
             <h2 itemprop="name" class="detail__title">${data.name}</h2>
@@ -71,36 +77,36 @@ class UIMenu extends UIComponent {
         </div>
       </article>`)
 
-    return context.lastElementChild
+    return domContext.lastElementChild
   }
 
   setBehaviour() {
-    let buttons = document.querySelectorAll(`#${this.domNode.id} [aria-role="button"]`)
+    const buttons = this.domNode.querySelectorAll('[aria-role="button"]')
+    const buttonsLength = buttons.length
     let i = 0
-    let l = buttons.length
     let activeMenuItems
-    let activeMenuItemsSel
     let button
     let item
 
-    for (; i<l; i++) {
+    for (; i < buttonsLength; i++) {
       buttons[i].addEventListener('click', evt => {
         evt.preventDefault()
 
         button = evt.target
         item = button.parentNode
-        activeMenuItemsSel = `#${this.domNode.id} .menu__item--active:not(#${item.id})`
-        activeMenuItems = document.querySelectorAll(activeMenuItemsSel)
+        activeMenuItems = this.domNode.querySelectorAll(`.menu__item--active:not(#${item.id})`)
 
         if (activeMenuItems.length) {
           this.hideItems(activeMenuItems)
         }
 
         this.showItem(item)
-        // @TODO manage widget state based on History API
-        //this.updateWidgetState(item)
       })
     }
+
+    document.addEventListener('show', evt => {
+      this.updateWidgetState(item)
+    })
   }
 
   hideItems(items) {
@@ -112,20 +118,27 @@ class UIMenu extends UIComponent {
 
   showItem(item) {
     const active = this.getItemState(item)
+    const event = new Event('show')
     let detail = item.children[1]
 
     this.setItemState(item)
 
     if (active) {
       this.setDetailVisibility(detail)
+      item.dispatchEvent(event)
     } else {
-      this.checkItemCache(item).then(data => {
-        if (!detail) {
-          detail = this.buildItemDetail(item, data)
-        }
+      this.checkItemCache(item)
+        .then(data => {
+          if (!detail) {
+            detail = this.buildItemDetail(item, data)
+          }
 
-        this.setDetailVisibility(detail)
-      })
+          this.setDetailVisibility(detail)
+          item.dispatchEvent(event)
+        })
+        .catch(error => {
+          throw error
+        })
     }
   }
 
@@ -173,16 +186,17 @@ class UIMenu extends UIComponent {
     item.classList[toggle]('menu__item--active')
   }
 
-/*
   updateWidgetState(activeItem) {
     const activeItemIndex = Array.from(activeItem.parentNode.children).indexOf(activeItem)
-    const path = activeItem.dataset.source
-    const data = sessionStorage.getItem(path)
-    const {name} = JSON.parse(data)
+    const activeItemPath = activeItem.dataset.source
+    const activeItemData = sessionStorage.getItem(activeItemPath)
+    const {name} = JSON.parse(activeItemData)
 
-    history.replaceState({activeItemIndex: activeItemIndex }, name, path)
+    this.activeItem = activeItem
+
+    history.pushState({activeItemIndex: activeItemIndex }, name, `../${activeItemPath}`)
+    document.title = name
   }
-*/
 }
 
 export default UIMenu

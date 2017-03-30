@@ -69,7 +69,7 @@ describe('UIComponent.js', () => {
   })
 
   beforeEach(() => {
-    //console.log('sessionStorage', sessionStorage)
+    console.log(location.href)
   })
 
   it('should render as many items as in model', () => {
