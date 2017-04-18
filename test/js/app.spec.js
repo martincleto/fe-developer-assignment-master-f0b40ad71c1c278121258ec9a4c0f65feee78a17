@@ -1,7 +1,7 @@
 import app from '../../public/js/app'
 import UIMenu from '../../public/js/components/UIMenu'
 
-let createDirective = () => {
+const createDirective = () => {
   let mockDirective = document.createElement('div')
   mockDirective.setAttribute('data-ui-widget', 'menu')
   mockDirective.setAttribute('data-model', 'hotels')
@@ -9,19 +9,21 @@ let createDirective = () => {
   document.body.appendChild(mockDirective)
 }
 
-let eventLoad = new Event('DOMContentLoaded')
+const eventLoad = new Event('DOMContentLoaded')
+let widgets
 
 describe('app.js', () => {
 
   beforeAll(() => {
+    widgets = window.widgets
     createDirective()
   })
 
   it('should instantiate UIMenu', () => {
-    spyOn(window, 'UIMenu')
+    spyOn(widgets, 'menu')
 
     document.dispatchEvent(eventLoad)
 
-    expect(window.UIMenu).toHaveBeenCalled()
+    expect(widgets.menu).toHaveBeenCalled()
   })
 })
